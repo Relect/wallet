@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+
+  postgres-db:
+    image: postgres:13.1
+    container_name: postgresTest
+    command: -p 5432
+    ports:
+      - 5433:5432
+    environment:
+      POSTGRES_DB: testdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST_AUTH_METHOD: md5
