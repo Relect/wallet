@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
 
 import java.util.UUID;
 
@@ -19,9 +18,9 @@ import java.util.UUID;
 public class Wallet {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "wallet_id")
-    private String walletId;
+    private UUID walletId;
 
     @Column(name = "amount")
     private int amount;

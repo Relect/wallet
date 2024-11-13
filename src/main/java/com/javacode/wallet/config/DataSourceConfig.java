@@ -2,7 +2,7 @@ package com.javacode.wallet.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
-//import liquibase.integration.spring.SpringLiquibase;
+import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
@@ -44,7 +44,7 @@ public class DataSourceConfig {
                                                                  JpaProperties jpaProperties) {
         return builder
                 .dataSource(dataSource)
-                .packages("com/example/todo_oath2/model")
+                .packages("com/javacode/wallet/model")
                 .persistenceUnit("applicationEntityManagerFactory")
                 .properties(hibernateProperties.determineHibernateProperties(jpaProperties.getProperties(), new HibernateSettings()))
                 .build();
@@ -55,7 +55,7 @@ public class DataSourceConfig {
         return new JpaTransactionManager(entityManagerFactory);
     }
 
-    /**
+
     @Bean
     public SpringLiquibase liquibase(DataSource dataSource) {
         SpringLiquibase liquibase = new SpringLiquibase();
@@ -63,7 +63,4 @@ public class DataSourceConfig {
         liquibase.setDataSource(dataSource);
         return liquibase;
     }
-
-    */
-
 }

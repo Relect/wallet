@@ -46,10 +46,10 @@
 			<artifactId>postgresql</artifactId>
 			<version>${postgre.version}</version>
 		</dependency>
-<!--		<dependency>
+		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
-		</dependency> -->
+		</dependency>
 	</dependencies>
 
 	<build>
