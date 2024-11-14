@@ -1,4 +1,4 @@
-FROM maven:3.9.9-eclipse-temurin-23-alpine
+FROM maven:3.9.9-amazoncorretto-21-alpine
 COPY app /app
 WORKDIR /app
 RUN mvn clean compile
