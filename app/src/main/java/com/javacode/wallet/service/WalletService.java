@@ -2,7 +2,6 @@ package com.javacode.wallet.service;
 
 import com.javacode.wallet.custom.Type;
 import com.javacode.wallet.dto.RequestWalletDto;
-import com.javacode.wallet.dto.WalletDto;
 import com.javacode.wallet.model.Wallet;
 import com.javacode.wallet.repository.WalletRepo;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.UnknownHostException;
 import java.util.Optional;
 import java.util.UUID;
 
