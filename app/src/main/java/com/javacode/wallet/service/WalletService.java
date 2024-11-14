@@ -26,14 +26,9 @@ public class WalletService {
 
         Optional<Wallet> opt = walletRepo.findById(requestWalletDto.getWalletId());
         if (opt.isEmpty()) {
-            if (requestWalletDto.getOperationType().equals(Type.WITHDRAW)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(String.format("wallet %s not found", requestWalletDto.getWalletId()));
-            } else {
-                Wallet wallet = new Wallet(requestWalletDto.getWalletId(), requestWalletDto.getAmount());
-                walletRepo.save(wallet);
-                return ResponseEntity.status(HttpStatus.CREATED).body(wallet.toString());
-            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("wallet %s not found", requestWalletDto.getWalletId()));
+
         } else {
             Wallet wallet = opt.get();
             if (requestWalletDto.getOperationType().equals(Type.WITHDRAW)) {
