@@ -2,6 +2,7 @@ package com.javacode.wallet.Controller;
 
 import com.javacode.wallet.dto.RequestWalletDto;
 import com.javacode.wallet.dto.WalletDto;
+import com.javacode.wallet.model.Wallet;
 import com.javacode.wallet.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
