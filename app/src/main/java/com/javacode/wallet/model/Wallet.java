@@ -18,7 +18,6 @@ import java.util.UUID;
 public class Wallet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "wallet_id")
     private UUID walletId;
 

@@ -32,7 +32,7 @@ public class WalletService {
             } else {
                 Wallet wallet = new Wallet(requestWalletDto.getWalletId(), requestWalletDto.getAmount());
                 walletRepo.save(wallet);
-                return ResponseEntity.ok().body(wallet.toString());
+                return ResponseEntity.status(HttpStatus.CREATED).body(wallet.toString());
             }
         } else {
             Wallet wallet = opt.get();

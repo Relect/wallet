@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
-public class Controller {
+public class WalletController {
     @Autowired
     private WalletService service;
 
