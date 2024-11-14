@@ -3,7 +3,7 @@ services:
 
   postgres-db:
     image: postgres:13.1
-    container_name: postgresTest
+    container_name: wallet-db
     command: -p 5432
     ports:
       - 5433:5432
@@ -12,3 +12,14 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_HOST_AUTH_METHOD: md5
+
+  app-service:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - 8081:8081
+    volumes:
+      - ./app/src/main/resources/application.properties:/app/src/main/resources/application.properties
+    depends_on:
+      - postgres-db
