@@ -2,17 +2,22 @@ package com.javacode.wallet.service;
 
 import com.javacode.wallet.custom.Type;
 import com.javacode.wallet.dto.RequestWalletDto;
+import com.javacode.wallet.dto.WalletDto;
 import com.javacode.wallet.model.Wallet;
 import com.javacode.wallet.repository.WalletRepo;
 import lombok.RequiredArgsConstructor;
+import org.postgresql.util.PSQLException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.UnknownHostException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,8 +33,9 @@ public class WalletService {
 
     @Transactional(
             propagation = Propagation.NESTED,
-            isolation = Isolation.READ_COMMITTED
+            isolation = Isolation.REPEATABLE_READ
     )
+    @Retryable(maxAttempts = 10, value = {PSQLException.class}, backoff = @Backoff(delay = 5000))
     public ResponseEntity<String > addAmount(RequestWalletDto requestWalletDto) {
 
         Optional<Wallet> opt = walletRepo.findById(requestWalletDto.getWalletId());
@@ -46,12 +52,12 @@ public class WalletService {
                             .body(String.format("In the wallet %s not enough money", requestWalletDto.getWalletId()));
                 }
                 wallet.setAmount(diff);
-                walletRepo.saveAndFlush(wallet);
+                walletRepo.save(wallet);
                 return ResponseEntity.ok(wallet.toString());
             } else {
                 int summ = wallet.getAmount() + requestWalletDto.getAmount();
                 wallet.setAmount(summ);
-                walletRepo.saveAndFlush(wallet);
+                walletRepo.save(wallet);
                 return ResponseEntity.ok(wallet.toString());
             }
         }
