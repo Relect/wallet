@@ -6,6 +6,7 @@ import com.javacode.wallet.dto.RequestWalletDto;
 import com.javacode.wallet.dto.WalletDto;
 import com.javacode.wallet.model.Wallet;
 import com.javacode.wallet.service.WalletService;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,8 +19,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.UUID;
 
@@ -27,7 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//@WebMvcTest(WalletController.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
@@ -51,27 +54,18 @@ public class WalletControllerTest {
     }
 
     @Test
-    public void addAmountTest() throws Exception {
-   //     Mockito.when(service.addAmount(Mockito.any(RequestWalletDto.class)))
-     //           .thenReturn(ResponseEntity.status(HttpStatus.CREATED)
-       //                 .body("{\"walletId\":\"8d1208fc-f401-496c-9cb8-483fef555555\",\"amount\":500}"));
+    public void addAmountTest() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));
+
+        Mockito.when(service.addAmount(Mockito.any(RequestWalletDto.class)))
+                .thenReturn(ResponseEntity.status(HttpStatus.CREATED)
+                        .body("{\"walletId\":\"8d1208fc-f401-496c-9cb8-483fef555555\",\"amount\":500}"));
 
         RequestWalletDto requestWalletDto = new RequestWalletDto(UUID.fromString("8d1208fc-f401-496c-9cb8-483fef555555"),
                 Type.DEPOSIT, 500);
-        mvc.perform(MockMvcRequestBuilders
-                .post("/api/v1/wallet")
-                .content(asJsonString(requestWalletDto))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
-    }
+        ResponseEntity<String> responseEntity = walletController.addAmount(requestWalletDto);
 
-    public static String asJsonString(final Object obj) {
-        try {
-            final ObjectMapper mapper = new ObjectMapper();
-            final String jsonContent = mapper.writeValueAsString(obj);
-            return jsonContent;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        Assertions.assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 }
