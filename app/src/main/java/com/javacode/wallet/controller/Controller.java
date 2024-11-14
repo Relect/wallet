@@ -1,8 +1,7 @@
-package com.javacode.wallet.Controller;
+package com.javacode.wallet.controller;
 
 import com.javacode.wallet.dto.RequestWalletDto;
 import com.javacode.wallet.dto.WalletDto;
-import com.javacode.wallet.model.Wallet;
 import com.javacode.wallet.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,9 @@ public class Controller {
 
     @PostMapping("/wallet")
     public ResponseEntity<String> addAmount(@RequestBody RequestWalletDto requestWalletDto) {
-        if (requestWalletDto.getOperationType() == null || requestWalletDto.getWalletId() == null ) {
+        if (requestWalletDto.getOperationType() == null
+                || requestWalletDto.getWalletId() == null
+                || requestWalletDto.getAmount() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Json not valid.");
         }
         return service.addAmount(requestWalletDto);
