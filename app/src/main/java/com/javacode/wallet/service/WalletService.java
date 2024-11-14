@@ -8,6 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +26,10 @@ public class WalletService {
         return walletRepo.findById(walletId);
     }
 
+    @Transactional(
+            propagation = Propagation.NESTED,
+            isolation = Isolation.READ_COMMITTED
+    )
     public ResponseEntity<String > addAmount(RequestWalletDto requestWalletDto) {
 
         Optional<Wallet> opt = walletRepo.findById(requestWalletDto.getWalletId());
@@ -38,12 +46,12 @@ public class WalletService {
                             .body(String.format("In the wallet %s not enough money", requestWalletDto.getWalletId()));
                 }
                 wallet.setAmount(diff);
-                walletRepo.save(wallet);
+                walletRepo.saveAndFlush(wallet);
                 return ResponseEntity.ok(wallet.toString());
             } else {
                 int summ = wallet.getAmount() + requestWalletDto.getAmount();
                 wallet.setAmount(summ);
-                walletRepo.save(wallet);
+                walletRepo.saveAndFlush(wallet);
                 return ResponseEntity.ok(wallet.toString());
             }
         }
